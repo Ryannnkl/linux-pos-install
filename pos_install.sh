@@ -24,26 +24,15 @@ else
   echo -e "${VERDE}[INFO]${SEM_COR} - Conexão com a Internet funcionando normalmente.${SEM_COR}"
 fi
 
-# wget está instalado?
-if [[ ! -x $(which wget) ]]; then
-  echo -e "${VERMELHO}[ERRO]${SEM_COR} - O programa wget não está instalado.${SEM_COR}"
-  echo -e "${VERDE}[INFO]${SEM_COR} - Instalando o wget...${SEM_COR}"
-  sudo dnf install wget -y &> /dev/null
-else
-  echo -e "${VERDE}[INFO] - O programa wget já está instalado.${SEM_COR}"
-fi
-
-
-
-
 # ------------------------------- INSTALAÇÃO DE PACOTES DNF ----------------------------------------- #
-
 
 PROGRAMAS_PARA_INSTALAR=(
   neovim
   nodejs
   vim
   htop
+  wget
+  curl
   gnome-tweaks
 )
 
@@ -55,8 +44,18 @@ for nome_do_programa in ${PROGRAMAS_PARA_INSTALAR[@]}; do
   fi
 done
 
+# ------------------------------- CONFIGURANDO FLATPAK ----------------------------------------- #
+
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+# ------------------------------- CONFIGURANDO NVIM ----------------------------------------- #
+
+if ls /home/$USER/.config/nvim; then
+  echo -e "${AMARELO}[INFO]${SEM_COR} Diretorio já criado"
+  else
+    git clone https://github.com/Ryannnkl/vim-config.git /home/$USER/.config/nvim
+fi
+
 # package_update
 
 echo -e "${VERDE}[INFO] - Script finalizado, instalação concluída! :)${SEM_COR}"
-
-
